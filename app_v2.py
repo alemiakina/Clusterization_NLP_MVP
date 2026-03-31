@@ -8,7 +8,7 @@ from sklearn.preprocessing import normalize
 from sklearn.metrics import silhouette_score
 
 import umap
-import hdbscan
+from sklearn.cluster import DBSCAN
 import plotly.express as px
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -98,9 +98,19 @@ def reduce_dim(X):
     return umap_model.fit_transform(X_pca)
 
 
+# -----------------------
+# Параметры DBSCAN в sidebar
+# -----------------------
+dbscan_eps = st.sidebar.slider("DBSCAN eps", 0.1, 5.0, 0.5, 0.1)
+dbscan_min_samples = st.sidebar.slider("DBSCAN min_samples", 1, 20, 5)
+
+# -----------------------
+# Функция кластеризации
+# -----------------------
 def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_size,
+    clusterer = DBSCAN(
+        eps=dbscan_eps,
+        min_samples=dbscan_min_samples,
         metric='euclidean'
     )
     return clusterer.fit_predict(X)
