@@ -264,14 +264,13 @@ def find_similar_topics_streamlit(new_text, df, embeddings, top_n=20):
         ascending=False
     )
 
-    return sorted_df.head(top_n)[[
-        'thesis_topic',
-        'year' if 'year' in df.columns else 'thesis_topic',
-        'supervisor' if 'supervisor' in df.columns else 'thesis_topic',
-        'Сходство (%)',
-        'cosine_sim',
-        'fuzzy_sim'
-    ]]
+    cols = ['thesis_topic']
+    if 'year' in df.columns:
+        cols.append('year')
+    if 'supervisor' in df.columns:
+        cols.append('supervisor')
+    cols += ['Сходство (%)', 'cosine_sim', 'fuzzy_sim']
+    return sorted_df.head(top_n)[cols]
 
 @st.cache_data
 def cached_embeddings(df, mode, alpha):
