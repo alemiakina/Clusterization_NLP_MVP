@@ -113,117 +113,8 @@ def cluster_data(X):
         metric='euclidean'
     )
     return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
-# -----------------------
-# Функция кластеризации
-# -----------------------
-def cluster_data(X):
-    clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
-    )
-    return clusterer.fit_predict(X)
-    
+
+
 def fuzzy_similarity(a, b):
     return max(
         fuzz.token_sort_ratio(a, b),
@@ -270,7 +161,12 @@ def find_similar_topics_streamlit(new_text, df, embeddings, top_n=20):
     if 'supervisor' in df.columns:
         cols.append('supervisor')
     cols += ['Сходство (%)', 'cosine_sim', 'fuzzy_sim']
+    # 🔥 защита от дублей
+    cols = list(dict.fromkeys(cols))
+    # 🔥 защита от дублей в df
+    sorted_df = sorted_df.loc[:, ~sorted_df.columns.duplicated()]
     return sorted_df.head(top_n)[cols]
+
 
 @st.cache_data
 def cached_embeddings(df, mode, alpha):
@@ -326,39 +222,6 @@ if uploaded_file:
                 labels = cluster_data(X_2d)
 
             df['cluster'] = labels
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-
-    
-    
-
-    
 
         # -----------------------
         # Метрики
