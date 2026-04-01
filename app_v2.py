@@ -223,12 +223,12 @@ if df is not None and not df.empty:
         st.dataframe(df_clustered[["thesis_topic", "cluster"]])
 
         # --- СКАЧИВАНИЕ ---
-        st.download_button(
-            "📥 Скачать результат",
-            df_clustered.to_csv(index=False),
-            "clusters.csv",
-            "text/csv"
-        )
+        #st.download_button(
+        #    "📥 Скачать результат",
+        #    df_clustered.to_csv(index=False),
+        #    "clusters.csv",
+        #    "text/csv"
+        #)
         
 
     # -----------------------
@@ -258,11 +258,11 @@ if df is not None and not df.empty:
             st.write("### 🔥 Похожие темы")
             st.dataframe(similar_df)
 
-            st.download_button(
-                "📥 Скачать результаты",
-                similar_df.to_csv(index=False),
-                "similar_topics.csv",
-                "text/csv"
-            )
+            #st.download_button(
+            #    "📥 Скачать результаты",
+            #    similar_df.to_csv(index=False),
+            #    "similar_topics.csv",
+            #    "text/csv"
+            #)
         else:
             st.warning("Введите тему")
