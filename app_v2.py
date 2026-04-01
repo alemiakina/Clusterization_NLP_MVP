@@ -27,7 +27,8 @@ mode = st.selectbox(
     ["Только темы", "Только описания", "Комбинированный"]
 )
 
-alpha = st.slider("Вес темы (alpha)", 0.0, 1.0, 0.7)
+#alpha = st.slider("Вес темы (alpha)", 0.0, 1.0, 0.7)
+alpha = 0.8
 
 st.sidebar.header("Параметры модели")
 
@@ -35,19 +36,6 @@ pca_dim = st.sidebar.slider("PCA компоненты", 10, 200, 50)
 umap_neighbors = st.sidebar.slider("UMAP n_neighbors", 5, 50, 15)
 umap_min_dist = st.sidebar.slider("UMAP min_dist", 0.0, 0.5, 0.1)
 cluster_size = st.sidebar.slider("min_cluster_size", 5, 50, 10)
-
-st.subheader("🔍 Проверка темы на дубликаты")
-
-new_topic = st.text_area(
-    "Введите тему ВКР",
-    placeholder="Например: Анализ больших данных в медицине"
-)
-
-top_n = st.slider("Сколько результатов показать", 5, 50, 20)
-
-if st.button("Проверить уникальность"):
-    st.session_state.run_duplicates = True
-
 
 # -----------------------
 # Модель
@@ -196,6 +184,18 @@ if uploaded_file:
                 embeddings,
                 top_n
             )
+
+        st.subheader("🔍 Проверка темы на дубликаты")
+
+        new_topic = st.text_area(
+        "Введите тему ВКР",
+        placeholder="Например: Анализ больших данных в медицине"
+        )
+
+top_n = st.slider("Сколько результатов показать", 5, 50, 20)
+
+if st.button("Проверить уникальность"):
+    st.session_state.run_duplicates = True
 
         st.write("### 🔥 Похожие темы")
         st.dataframe(similar_df)
