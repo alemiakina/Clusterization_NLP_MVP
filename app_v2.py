@@ -54,7 +54,7 @@ def truncate(text, max_words=50):
     return " ".join(str(text).split()[:max_words])
 
 
-def get_embeddings(df, mode="Только темы", alpha):
+def get_embeddings(df, mode="Только темы", alpha=0.8):
     titles = df['thesis_topic'].fillna("").tolist()
     descs = df['description_thesis'].fillna("").apply(truncate).tolist()
 
