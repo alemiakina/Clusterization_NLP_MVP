@@ -31,7 +31,7 @@ mode = "Только темы"
 #alpha = st.slider("Вес темы (alpha)", 0.0, 1.0, 0.7)
 alpha = 0.8
 
-st.sidebar.header("Параметры модели")
+#st.sidebar.header("Параметры модели")
 
 #pca_dim = st.sidebar.slider("PCA компоненты", 10, 200, 50)
 #umap_neighbors = st.sidebar.slider("UMAP n_neighbors", 5, 50, 15)
