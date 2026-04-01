@@ -54,7 +54,7 @@ def truncate(text, max_words=50):
     return " ".join(str(text).split()[:max_words])
 
 
-def get_embeddings(df, mode, alpha):
+def get_embeddings(df, mode="Только темы", alpha):
     titles = df['thesis_topic'].fillna("").tolist()
     descs = df['description_thesis'].fillna("").apply(truncate).tolist()
 
@@ -210,7 +210,7 @@ if uploaded_file:
             st.warning("Недостаточно кластеров для метрики")
 
         # --- ТАБЛИЦА ---
-        st.dataframe(df["thesis_topic", ["label"])
+        st.dataframe(df["thesis_topic", "label"])
 
         # --- СКАЧИВАНИЕ ---
         st.download_button(
