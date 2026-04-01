@@ -33,10 +33,10 @@ alpha = 0.8
 
 st.sidebar.header("Параметры модели")
 
-pca_dim = st.sidebar.slider("PCA компоненты", 10, 200, 50)
-umap_neighbors = st.sidebar.slider("UMAP n_neighbors", 5, 50, 15)
-umap_min_dist = st.sidebar.slider("UMAP min_dist", 0.0, 0.5, 0.1)
-cluster_size = st.sidebar.slider("min_cluster_size", 5, 50, 10)
+#pca_dim = st.sidebar.slider("PCA компоненты", 10, 200, 50)
+#umap_neighbors = st.sidebar.slider("UMAP n_neighbors", 5, 50, 15)
+#umap_min_dist = st.sidebar.slider("UMAP min_dist", 0.0, 0.5, 0.1)
+#cluster_size = st.sidebar.slider("min_cluster_size", 5, 50, 10)
 
 # -----------------------
 # Модель
@@ -73,13 +73,13 @@ def get_embeddings(df, mode="Только темы", alpha=0.8):
 
 
 def reduce_dim(X):
-    pca = PCA(n_components=pca_dim)
+    pca = PCA(n_components=50, random_state=42)
     X_pca = pca.fit_transform(X)
 
     umap_model = umap.UMAP(
-        n_neighbors=umap_neighbors,
-        min_dist=umap_min_dist,
-        n_components=2,
+        n_neighbors=15,
+        n_components=8,
+        min_dist=0.01,
         metric='cosine',
         random_state=42
     )
@@ -89,17 +89,18 @@ def reduce_dim(X):
 # -----------------------
 # Параметры HDBSCAN в sidebar
 # -----------------------
-cluster_min_size = st.sidebar.slider("HDBSCAN min_cluster_size", 5, 50, 10)
-cluster_eps = st.sidebar.slider("HDBSCAN cluster_selection_epsilon", 0.0, 1.0, 0.0, 0.01)
+#cluster_min_size = st.sidebar.slider("HDBSCAN min_cluster_size", 5, 50, 10)
+#cluster_eps = st.sidebar.slider("HDBSCAN cluster_selection_epsilon", 0.0, 1.0, 0.0, 0.01)
 
 # -----------------------
 # Функция кластеризации
 # -----------------------
 def cluster_data(X):
     clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=cluster_min_size,
-        cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
+        min_cluster_size=7,
+        min_samples=4,
+        #cluster_selection_epsilon=cluster_eps,
+        metric='cosine'
     )
     return clusterer.fit_predict(X)
 
