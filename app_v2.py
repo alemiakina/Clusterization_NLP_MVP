@@ -162,7 +162,7 @@ def cached_embeddings(df, mode, alpha):
 # -----------------------
 # Основной запуск
 # -----------------------
-if uploaded_file:
+if df is not None and not df.empty:
 
     df = pd.read_excel(uploaded_file)
 
