@@ -224,17 +224,6 @@ if uploaded_file:
             df['cluster'] = labels
 
         # -----------------------
-        # Метрики
-        # -----------------------
-        mask = labels != -1
-
-        if len(set(labels[mask])) > 1:
-            score = silhouette_score(X_2d[mask], labels[mask])
-            st.metric("Silhouette Score", round(score, 3))
-        else:
-            st.warning("Недостаточно кластеров для метрики")
-
-        # -----------------------
         # Визуализация
         # -----------------------
         fig = px.scatter(
@@ -246,6 +235,18 @@ if uploaded_file:
         )
 
         st.plotly_chart(fig, use_container_width=True)
+
+        # -----------------------
+        # Метрики
+        # -----------------------
+        mask = labels != -1
+
+        if len(set(labels[mask])) > 1:
+            score = silhouette_score(X_2d[mask], labels[mask])
+            st.metric("Silhouette Score", round(score, 3))
+        else:
+            st.warning("Недостаточно кластеров для метрики")
+
 
         # -----------------------
         # Таблица
