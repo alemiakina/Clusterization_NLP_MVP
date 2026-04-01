@@ -18,7 +18,7 @@ from rapidfuzz import fuzz
 # -----------------------
 # UI
 # -----------------------
-st.title("📊 Кластеризация ВКР")
+st.title("Кластеризация ВКР")
 
 #uploaded_file = st.file_uploader("Загрузи Excel", type=["xlsx"])
 df = pd.read_excel("df_excel_clean.xlsx")
@@ -235,7 +235,7 @@ if df is not None and not df.empty:
     # -----------------------
     # 🔍 ПРОВЕРКА ДУБЛИКАТОВ (ПОСЛЕ ГРАФИКА!)
     # -----------------------
-    st.subheader("🔍 Проверка темы на дубликаты")
+    st.subheader("Проверка темы на уникальность")
 
     new_topic = st.text_area(
         "Введите тему ВКР",
