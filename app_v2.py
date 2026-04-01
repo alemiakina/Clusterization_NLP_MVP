@@ -211,7 +211,7 @@ if df is not None and not df.empty:
             st.warning("Недостаточно кластеров для метрики")
 
         # --- ТАБЛИЦА ---
-        st.dataframe(df["thesis_topic", "label"])
+        st.dataframe(df[["thesis_topic", "cluster"]])
 
         # --- СКАЧИВАНИЕ ---
         st.download_button(
