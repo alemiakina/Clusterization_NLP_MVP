@@ -197,15 +197,15 @@ top_n = st.slider("Сколько результатов показать", 5, 5
 if st.button("Проверить уникальность"):
     st.session_state.run_duplicates = True
 
-        st.write("### 🔥 Похожие темы")
-        st.dataframe(similar_df)
+    st.write("### 🔥 Похожие темы")
+    st.dataframe(similar_df)
 
-        st.download_button(
-            "📥 Скачать результаты",
-            similar_df.to_csv(index=False),
-            "similar_topics.csv",
-            "text/csv"
-        )
+    st.download_button(
+        "📥 Скачать результаты",
+        similar_df.to_csv(index=False),
+        "similar_topics.csv",
+        "text/csv"
+    )
 
 
     # -----------------------
