@@ -21,7 +21,7 @@ from rapidfuzz import fuzz
 st.title("📊 Кластеризация ВКР")
 
 #uploaded_file = st.file_uploader("Загрузи Excel", type=["xlsx"])
-uploaded_file = pd.read_excel("df_excel_clean.xlsx")
+df = pd.read_excel("df_excel_clean.xlsx")
 #mode = st.selectbox(
 #    "Режим эмбеддинга",
 #    ["Только темы", "Только описания", "Комбинированный"]
@@ -164,7 +164,7 @@ def cached_embeddings(df, mode, alpha):
 # -----------------------
 if df is not None and not df.empty:
 
-    df = pd.read_excel(uploaded_file)
+    #df = pd.read_excel(uploaded_file)
 
     # -----------------------
     # ЭМБЕДДИНГИ
