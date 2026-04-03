@@ -89,7 +89,6 @@ def reduce_dim(X):
 
 def add_cluster_boundaries(fig, X, labels, color_map):
     unique_labels = set(labels)
-
     X_2d = X[:, :2]
 
     for label in unique_labels:
@@ -102,7 +101,6 @@ def add_cluster_boundaries(fig, X, labels, color_map):
             continue
 
         color = color_map[label_str]
-
         points = X_2d[labels == label]
 
         if len(points) < 3:
@@ -111,27 +109,34 @@ def add_cluster_boundaries(fig, X, labels, color_map):
         try:
             hull = ConvexHull(points)
             hull_points = points[hull.vertices]
-
-            # замыкаем контур
             hull_points = np.append(hull_points, [hull_points[0]], axis=0)
 
-            # 🔥 делаем прозрачный цвет
-            fillcolor = color.replace("rgb", "rgba").replace(")", ",0.08)")
-
+            # --- 1. ОБЫЧНАЯ граница ---
             fig.add_scatter(
                 x=hull_points[:, 0],
                 y=hull_points[:, 1],
                 mode='lines',
-                line=dict(
-                    width=2,
-                    color=color
-                ),
+                line=dict(width=2, color=color),
                 fill='toself',
-                fillcolor=fillcolor,
+                fillcolor=color.replace("rgb", "rgba").replace(")", ",0.08)"),
+                opacity=0.3,
                 showlegend=False,
-                opacity=0.35,
                 hoverinfo="skip",
-                hovertemplate=None
+                legendgroup=f"cluster_{label}"
+            )
+
+            # --- 2. АКТИВНАЯ граница (скрытая) ---
+            fig.add_scatter(
+                x=hull_points[:, 0],
+                y=hull_points[:, 1],
+                mode='lines',
+                line=dict(width=4, color=color),
+                fill='toself',
+                fillcolor=color.replace("rgb", "rgba").replace(")", ",0.25)"),
+                opacity=0,  # 🔥 СКРЫТА
+                showlegend=False,
+                hoverinfo="skip",
+                legendgroup=f"cluster_{label}"
             )
 
         except:
