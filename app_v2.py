@@ -313,13 +313,13 @@ if df is not None and not df.empty:
         fig = px.scatter(
             x=X_display[:, 0],
             y=X_display[:, 1],
-            color=labels.astype(str),
+            color=labels_display.astype(str),
             hover_data=[df_display['thesis_topic']],
             title="Кластеры",
             opacity=0.9
         )
         color_map = get_cluster_colors(fig)
-        fig = add_cluster_boundaries(fig, X_2d, labels, color_map)
+        fig = add_cluster_boundaries(fig, X_display, labels_display, color_map)
         st.plotly_chart(fig, use_container_width=True)
 
         # --- МЕТРИКА ---
