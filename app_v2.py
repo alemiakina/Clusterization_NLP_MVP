@@ -90,26 +90,35 @@ def reduce_dim(X):
 def add_cluster_boundaries(fig, X, labels):
     unique_labels = set(labels)
 
+    # 🔥 берём только 2D-проекцию (то, что реально рисуется)
+    X_2d = X[:, :2]
+
     for label in unique_labels:
         if label == -1:
             continue
 
-        points = X[labels == label]
+        points = X_2d[labels == label]
 
         if len(points) < 3:
             continue
 
-        hull = ConvexHull(points)
+        try:
+            hull = ConvexHull(points)
+            hull_points = points[hull.vertices]
 
-        hull_points = points[hull.vertices]
+            # 🔥 ЗАМЫКАЕМ КОНТУР
+            hull_points = np.append(hull_points, [hull_points[0]], axis=0)
 
-        fig.add_scatter(
-            x=hull_points[:, 0],
-            y=hull_points[:, 1],
-            mode='lines',
-            line=dict(width=2),
-            showlegend=False
-        )
+            fig.add_scatter(
+                x=hull_points[:, 0],
+                y=hull_points[:, 1],
+                mode='lines',
+                line=dict(width=2),
+                showlegend=False
+            )
+
+        except:
+            continue
 
     return fig
 
