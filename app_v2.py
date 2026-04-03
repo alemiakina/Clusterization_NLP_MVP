@@ -265,6 +265,30 @@ if df is not None and not df.empty:
         df_clustered = st.session_state.clustered_df
 
         # -----------------------
+        # 🎛️ ФИЛЬТР ПО ПРЕПОДАВАТЕЛЮ
+        # -----------------------
+
+        col1, col2 = st.columns([1, 2])
+
+        with col1:
+            show_all = st.button("Показать всех")
+
+        with col2:
+            selected_supervisor = st.text_input("Фильтр по преподавателю")
+
+        # по умолчанию показываем всех
+        if "filter_mode" not in st.session_state:
+            st.session_state.filter_mode = "all"
+
+        # обработка кнопки
+        if show_all:
+            st.session_state.filter_mode = "all"
+
+        # если введён преподаватель → переключаем режим
+        if selected_supervisor.strip():
+            st.session_state.filter_mode = "supervisor"
+
+        # -----------------------
         # 📊 ФИЛЬТРАЦИЯ ДАННЫХ
         # -----------------------
 
@@ -297,31 +321,6 @@ if df is not None and not df.empty:
         color_map = get_cluster_colors(fig)
         fig = add_cluster_boundaries(fig, X_2d, labels, color_map)
         st.plotly_chart(fig, use_container_width=True)
-
-        # -----------------------
-        # 🎛️ ФИЛЬТР ПО ПРЕПОДАВАТЕЛЮ
-        # -----------------------
-
-        col1, col2 = st.columns([1, 2])
-
-        with col1:
-            show_all = st.button("Показать всех")
-
-        with col2:
-            selected_supervisor = st.text_input("Фильтр по преподавателю")
-
-        # по умолчанию показываем всех
-        if "filter_mode" not in st.session_state:
-            st.session_state.filter_mode = "all"
-
-        # обработка кнопки
-        if show_all:
-            st.session_state.filter_mode = "all"
-
-        # если введён преподаватель → переключаем режим
-        if selected_supervisor.strip():
-            st.session_state.filter_mode = "supervisor"
-
 
         # --- МЕТРИКА ---
         mask = labels != -1
