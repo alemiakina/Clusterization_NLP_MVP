@@ -363,7 +363,8 @@ if df is not None and not df.empty:
             ], axis=-1),
             hovertemplate=(
                 "<b>Кластер:</b> %{customdata[1]}<br>" +
-                "<b>Тема:</b> %{customdata[0]}<extra></extra>"
+                "<b>Тема:</b> %{customdata[0]}<extra></extra>" +
+                "<extra></extra>"
             ),
             hoverinfo="skip",
             name="Кластеры"
