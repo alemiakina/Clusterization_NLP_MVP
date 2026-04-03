@@ -338,7 +338,8 @@ if df is not None and not df.empty:
         fig.update_traces(
             marker=dict(color="lightgray", size=5),
             showlegend=False,
-            hoverinfo="skip"
+            hoverinfo="skip",
+            hovertemplate=None 
         )
 
         # --- 3. ВЫДЕЛЕННЫЕ ТОЧКИ ---
@@ -364,7 +365,8 @@ if df is not None and not df.empty:
                 "<b>Кластер:</b> %{customdata[1]}<br>" +
                 "<b>Тема:</b> %{customdata[0]}<extra></extra>"
             ),
-            name="Отфильтрованные"
+            hoverinfo="skip",
+            name="Кластеры"
         )
 
         # --- 4. ГРАНИЦЫ (по ВСЕМ данным) ---
