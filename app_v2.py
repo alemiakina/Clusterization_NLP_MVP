@@ -10,6 +10,7 @@ from sklearn.metrics import silhouette_score
 import umap
 import hdbscan
 import plotly.express as px
+from scipy.spatial import ConvexHull
 
 from sklearn.metrics.pairwise import cosine_similarity
 from rapidfuzz import fuzz
@@ -85,6 +86,32 @@ def reduce_dim(X):
     )
 
     return umap_model.fit_transform(X_pca)
+
+def add_cluster_boundaries(fig, X, labels):
+    unique_labels = set(labels)
+
+    for label in unique_labels:
+        if label == -1:
+            continue
+
+        points = X[labels == label]
+
+        if len(points) < 3:
+            continue
+
+        hull = ConvexHull(points)
+
+        hull_points = points[hull.vertices]
+
+        fig.add_scatter(
+            x=hull_points[:, 0],
+            y=hull_points[:, 1],
+            mode='lines',
+            line=dict(width=2),
+            showlegend=False
+        )
+
+    return fig
 
 # -----------------------
 # Параметры HDBSCAN в sidebar
@@ -209,7 +236,7 @@ if df is not None and not df.empty:
             hover_data=[df_clustered['thesis_topic']],
             title="Кластеры"
         )
-
+        fig = add_cluster_boundaries(fig, X_2d, labels)
         st.plotly_chart(fig, use_container_width=True)
 
         # --- МЕТРИКА ---
