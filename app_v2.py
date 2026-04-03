@@ -129,7 +129,7 @@ def add_cluster_boundaries(fig, X, labels, color_map):
                 fill='toself',
                 fillcolor=fillcolor,
                 showlegend=False,
-                opacity=0.2
+                opacity=0.35
             )
 
         except:
