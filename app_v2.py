@@ -270,7 +270,7 @@ if df is not None and not df.empty:
             color=labels.astype(str),
             hover_data=[df_clustered['thesis_topic']],
             title="Кластеры",
-            opacity=0.9
+            opacity=0.1
         )
         color_map = get_cluster_colors(fig)
         fig = add_cluster_boundaries(fig, X_2d, labels, color_map)
