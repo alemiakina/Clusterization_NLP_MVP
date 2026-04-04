@@ -26,8 +26,27 @@ st.title("Кластеризация ВКР")
 
 st.markdown("""
 <style>
-[data-testid="stDataFrame"] td {
-    padding: 4px 6px !important;
+/* --- ВТОРАЯ колонка (cluster) --- */
+[data-testid="stDataFrame"] th:nth-child(2),
+[data-testid="stDataFrame"] td:nth-child(2) {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+    text-align: center;
+}
+
+/* --- ТРЕТЬЯ колонка (supervisor) --- */
+[data-testid="stDataFrame"] th:nth-child(3),
+[data-testid="stDataFrame"] td:nth-child(3) {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
+}
+
+/* --- ПЕРВАЯ колонка (тема) --- */
+[data-testid="stDataFrame"] th:nth-child(1),
+[data-testid="stDataFrame"] td:nth-child(1) {
+    width: 100% !important;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -144,7 +163,7 @@ def add_cluster_boundaries(fig, X, labels, color_map):
                 line=dict(width=4, color=color),
                 fill='toself',
                 fillcolor=color.replace("rgb", "rgba").replace(")", ",0.25)"),
-                opacity=0,  # 🔥 СКРЫТА
+                opacity=0, 
                 showlegend=False,
                 hoverinfo="skip",
                 legendgroup=f"cluster_{label}"
@@ -234,9 +253,9 @@ def find_similar_topics_streamlit(new_text, df, embeddings, top_n=20):
     if 'supervisor' in df.columns:
         cols.append('supervisor')
     cols += ['Сходство (%)', 'cosine_sim', 'fuzzy_sim']
-    # 🔥 защита от дублей
+    # защита от дублей
     cols = list(dict.fromkeys(cols))
-    # 🔥 защита от дублей в df
+    # защита от дублей в df
     sorted_df = sorted_df.loc[:, ~sorted_df.columns.duplicated()]
     return sorted_df.head(top_n)[cols]
 
@@ -258,7 +277,7 @@ if df is not None and not df.empty:
         embeddings = cached_embeddings(df, mode, alpha)
 
     # -----------------------
-    # 🚀 КЛАСТЕРИЗАЦИЯ (ПЕРВАЯ!)
+    # КЛАСТЕРИЗАЦИЯ (ПЕРВАЯ!)
     # -----------------------
     st.subheader("Кластеризация")
 
@@ -269,7 +288,7 @@ if df is not None and not df.empty:
         with st.spinner("Кластеризация..."):
             labels = cluster_data(X_2d)
 
-        # 💾 СОХРАНЯЕМ
+        # СОХРАНЯЕМ
         st.session_state.X_2d = X_2d
         st.session_state.labels = labels
         st.session_state.clustered_df = df.copy()
@@ -292,7 +311,7 @@ if df is not None and not df.empty:
         )
 
         # -----------------------
-        # 🎛️ ФИЛЬТР ПО ПРЕПОДАВАТЕЛЮ
+        # ФИЛЬТР ПО ПРЕПОДАВАТЕЛЮ
         # -----------------------
 
         col1, col2 = st.columns([1, 2])
@@ -326,18 +345,18 @@ if df is not None and not df.empty:
         #    st.session_state.filter_mode = "supervisor"
 
         # -----------------------
-        # 📊 ФИЛЬТРАЦИЯ ДАННЫХ
+        # ФИЛЬТРАЦИЯ ДАННЫХ
         # -----------------------
 
         df_display = df_clustered.copy()
 
-        # 🔥 фильтр по кластеру
+        # фильтр по кластеру
         if selected_cluster != "Все":
             df_display = df_display[
                 df_display["cluster"] == int(selected_cluster)
             ]
 
-        # 🔥 фильтр по преподавателю
+        # фильтр по преподавателю
         if selected_supervisor:
             df_display = df_display[
                 df_display["supervisor_code"].isin(selected_supervisor)
@@ -352,7 +371,7 @@ if df is not None and not df.empty:
         fig_full = px.scatter(
             x=X_2d[:, 0],
             y=X_2d[:, 1],
-            color=labels.astype(str)  # 🔥 ВАЖНО: делаем категории
+            color=labels.astype(str) 
         )
 
         color_map = get_cluster_colors(fig_full)
@@ -396,10 +415,10 @@ if df is not None and not df.empty:
                 ),
                 name=f"Кластер {cluster}",
 
-                # 🔥 ВАЖНО: добавляем group
+                # добавляем group
                 legendgroup=f"cluster_{cluster}",
 
-                # 🔥 ВОТ ЭТО ДАЁТ ПОДСВЕТКУ
+                # ВОТ ЭТО ДАЁТ ПОДСВЕТКУ
                 selected=dict(
                 marker=dict(
                     size=12,
@@ -462,18 +481,10 @@ if df is not None and not df.empty:
                 )
             }
         )
-
-        # --- СКАЧИВАНИЕ ---
-        #st.download_button(
-        #    "📥 Скачать результат",
-        #    df_clustered.to_csv(index=False),
-        #    "clusters.csv",
-        #    "text/csv"
-        #)
         
 
     # -----------------------
-    # 🔍 ПРОВЕРКА ДУБЛИКАТОВ (ПОСЛЕ ГРАФИКА!)
+    #  ПРОВЕРКА ДУБЛИКАТОВ 
     # -----------------------
     st.subheader("Проверка темы на уникальность")
 
@@ -499,11 +510,5 @@ if df is not None and not df.empty:
             st.write("### 🔥 Похожие темы")
             st.dataframe(similar_df, use_container_width=True)
 
-            #st.download_button(
-            #    "📥 Скачать результаты",
-            #    similar_df.to_csv(index=False),
-            #    "similar_topics.csv",
-            #    "text/csv"
-            #)
         else:
             st.warning("Введите тему")
