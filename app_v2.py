@@ -379,7 +379,7 @@ if df is not None and not df.empty:
             cluster_mask = labels_display == cluster
 
             X_cluster = X_display[cluster_mask]
-            df_cluster_part = df_display.iloc[cluster_mask]
+            df_cluster_part = df_display[cluster_mask]
 
             color = color_map.get(str(cluster), "gray")
 
