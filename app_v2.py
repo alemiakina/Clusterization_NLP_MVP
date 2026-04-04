@@ -153,8 +153,7 @@ def cluster_data(X):
     clusterer = hdbscan.HDBSCAN(
         min_cluster_size=7,
         min_samples=4,
-        metric='euclidean',
-        algorithm='brute'
+        metric='cosine'
     )
     return clusterer.fit_predict(X)
 
