@@ -340,6 +340,7 @@ if df is not None and not df.empty:
         if selected_years:
             df_display = df_display[
                 df_display["year"].astype(str).isin(selected_years)
+            ]
 
         
 
