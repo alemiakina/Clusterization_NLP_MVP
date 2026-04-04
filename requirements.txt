@@ -1,4 +1,5 @@
 # requirements.txt
+rich==13.7.1
 streamlit==1.39.0
 pandas==2.1.4
 openpyxl>=3.1.0
@@ -12,4 +13,3 @@ transformers>=4.35.0
 torch>=2.1.0
 huggingface_hub>=0.17.3
 hdbscan==0.8.42
-rich==13.7.1
