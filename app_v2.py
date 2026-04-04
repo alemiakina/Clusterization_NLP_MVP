@@ -275,6 +275,13 @@ if df is not None and not df.empty:
         labels = st.session_state.labels
         df_clustered = st.session_state.clustered_df
 
+        supervisors = sorted(
+            df_clustered["supervisor_code"]
+            .dropna()
+            .astype(str)
+            .unique()
+        )
+
         # -----------------------
         # 🎛️ ФИЛЬТР ПО ПРЕПОДАВАТЕЛЮ
         # -----------------------
@@ -285,23 +292,28 @@ if df is not None and not df.empty:
             show_all = st.button("Показать всех")
 
         with col2:
-            selected_supervisor = st.text_input("Фильтр по преподавателю")
+            selected_supervisor = st.multiselect(
+                "Фильтр по преподавателю",
+                options=supervisors,
+                max_selections=1
+            )
+
             clusters = sorted(df_clustered["cluster"].unique())
             cluster_options = ["Все"] + [str(c) for c in clusters if c != -1]
 
         selected_cluster = st.selectbox("Фильтр по кластеру", cluster_options)
 
         # по умолчанию показываем всех
-        if "filter_mode" not in st.session_state:
-            st.session_state.filter_mode = "all"
+        #if "filter_mode" not in st.session_state:
+        #    st.session_state.filter_mode = "all"
 
         # обработка кнопки
-        if show_all:
-            st.session_state.filter_mode = "all"
+        #if show_all:
+        #    st.session_state.filter_mode = "all"
 
         # если введён преподаватель → переключаем режим
-        if selected_supervisor.strip():
-            st.session_state.filter_mode = "supervisor"
+        #if selected_supervisor.strip():
+        #    st.session_state.filter_mode = "supervisor"
 
         # -----------------------
         # 📊 ФИЛЬТРАЦИЯ ДАННЫХ
@@ -316,13 +328,9 @@ if df is not None and not df.empty:
             ]
 
         # 🔥 фильтр по преподавателю
-        if st.session_state.filter_mode == "supervisor":
+        if selected_supervisor:
             df_display = df_display[
-                df_display["supervisor_code"].str.contains(
-                    selected_supervisor,
-                    case=False,
-                    na=False
-                )
+                df_display["supervisor_code"] == selected_supervisor[0]
             ]
 
         # --- ГРАФИК ---
@@ -425,7 +433,7 @@ if df is not None and not df.empty:
             st.warning("Недостаточно кластеров для метрики")
 
         # --- ТАБЛИЦА ---
-        st.dataframe(df_clustered[["thesis_topic", "cluster"]])
+        st.dataframe(df_display[["thesis_topic", "cluster", "supervisor_code"]])
 
         # --- СКАЧИВАНИЕ ---
         #st.download_button(
