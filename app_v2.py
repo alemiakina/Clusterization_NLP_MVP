@@ -295,7 +295,7 @@ if df is not None and not df.empty:
             selected_supervisor = st.multiselect(
                 "Фильтр по преподавателю",
                 options=supervisors,
-                max_selections=1
+                #max_selections=1
             )
 
             clusters = sorted(df_clustered["cluster"].unique())
@@ -330,8 +330,10 @@ if df is not None and not df.empty:
         # 🔥 фильтр по преподавателю
         if selected_supervisor:
             df_display = df_display[
-                df_display["supervisor_code"] == selected_supervisor[0]
+                df_display["supervisor_code"].isin(selected_supervisor)
             ]
+        if show_all:
+            selected_supervisor = []
 
         # --- ГРАФИК ---
         indices = df_display.index
