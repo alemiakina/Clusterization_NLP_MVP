@@ -265,15 +265,23 @@ if df is not None and not df.empty:
             .unique()
         )
 
+        years = sorted(
+            df_clustered["year"]
+            .dropna()
+            .astype(str)
+            .unique()
+        )
+
         # -----------------------
         # ФИЛЬТР ПО ПРЕПОДАВАТЕЛЮ
         # -----------------------
 
-        col1, col2 = st.columns([1, 2])
+        col1, col2, col3 = st.columns([1, 2, 2])
 
         with col1:
-            if st.button("Показать всех"):
+            if st.button("Сброс фильтров"):
                 st.session_state.selected_supervisors = []
+                st.session_state.selected_years = []
 
         with col2:
             if "selected_supervisors" not in st.session_state:
@@ -284,6 +292,17 @@ if df is not None and not df.empty:
                 options=supervisors,
                 default=st.session_state.selected_supervisors,
                 key="selected_supervisors"
+            )
+
+        with col3:
+            if "selected_years" not in st.session_state:
+                st.session_state.selected_years = []
+
+            selected_years = st.multiselect(
+                "Фильтр по году",
+                options=years,
+                default=st.session_state.selected_years,
+                key="selected_years"
             )
 
             clusters = sorted(df_clustered["cluster"].unique())
@@ -316,6 +335,13 @@ if df is not None and not df.empty:
             df_display = df_display[
                 df_display["supervisor_code"].isin(selected_supervisor)
             ]
+
+        # фильтр по годам
+        if selected_years:
+            df_display = df_display[
+                df_display["year"].astype(str).isin(selected_years)
+
+        
 
         # --- ГРАФИК ---
         indices = df_display.index
