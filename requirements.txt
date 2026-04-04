@@ -1,18 +1,14 @@
+# requirements.txt
 streamlit==1.39.0
-rich==13.7.1
-
 pandas==2.1.4
-numpy==1.26.4
 openpyxl>=3.1.0
-
-scikit-learn==1.3.2
-umap-learn==0.5.5
-hdbscan==0.8.33
-
+numpy==1.26.4
+scikit-learn==1.4.0
+umap-learn==0.5.6
 plotly==5.18.0
 rapidfuzz==3.6.2
-
-sentence-transformers==2.6.1
-transformers==4.38.2
-torch==2.1.2
-huggingface_hub==0.20.3
+sentence-transformers==3.2.0
+transformers>=4.35.0
+torch>=2.1.0
+huggingface_hub>=0.17.3
+hdbscan>=0.8.40
