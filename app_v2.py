@@ -71,7 +71,7 @@ def reduce_dim(X):
         n_neighbors=15,
         n_components=8,
         min_dist=0.01,
-        metric='cosine',
+        metric='euclidean',
         random_state=42
     )
 
