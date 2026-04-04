@@ -1,4 +1,3 @@
-### ПОКА НЕ БУДЕТ ПРАВОК -- НИЧЕГО НЕ ТРОГАЮ! ВИЗУАЛ ГРАФИКА ИМХО ХОРОШ, ПРАКТИЧЕСКИ МАКСИМУМ, ЧТО Я СМОГ ВЫТЯНУТЬ ИЗ ТЕКУЩЕГО ИНСТРУМЕНТАРИЯ ###
 
 import streamlit as st
 import pandas as pd
@@ -21,6 +20,8 @@ from rapidfuzz import fuzz
 # -----------------------
 # UI
 # -----------------------
+st.set_page_config(layout="wide")
+
 st.title("Кластеризация ВКР")
 
 st.markdown("""
