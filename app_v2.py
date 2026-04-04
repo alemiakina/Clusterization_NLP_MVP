@@ -71,7 +71,7 @@ def reduce_dim(X):
         n_neighbors=15,
         n_components=8,
         min_dist=0.01,
-        metric='euclidean',
+        metric='cosine',
         random_state=42
     )
 
@@ -154,7 +154,7 @@ def cluster_data(X):
         min_cluster_size=7,
         min_samples=4,
         #cluster_selection_epsilon=cluster_eps,
-        metric='cosine'
+        metric='euclidean'
     )
     return clusterer.fit_predict(X)
 
