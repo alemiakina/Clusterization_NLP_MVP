@@ -51,17 +51,20 @@ def get_embeddings(df, mode="Только темы", alpha=0.8):
     titles = df['thesis_topic'].fillna("").tolist()
     descs = df['description_thesis'].fillna("").apply(truncate).tolist()
 
-    title_emb = model.encode(titles, normalize_embeddings=True)
-    desc_emb = model.encode(descs, normalize_embeddings=True)
+    title_emb = model.encode(titles)
+    desc_emb = model.encode(descs)
+
+    from sklearn.preprocessing import normalize
 
     if mode == "Только темы":
-        return title_emb
-
+        X = title_emb
     elif mode == "Только описания":
-        return desc_emb
-
+        X = desc_emb
     else:
-        return alpha * title_emb + (1 - alpha) * desc_emb
+        X = alpha * title_emb + (1 - alpha) * desc_emb
+
+    X = normalize(X)
+    return X
 
 
 def reduce_dim(X):
@@ -155,7 +158,7 @@ def cluster_data(X):
         min_cluster_size=7,
         min_samples=4,
         #cluster_selection_epsilon=cluster_eps,
-        metric='euclidean'
+        metric='cosine'
     )
     return clusterer.fit_predict(X)
 
