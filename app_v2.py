@@ -312,10 +312,6 @@ if df is not None and not df.empty:
         #if "filter_mode" not in st.session_state:
         #    st.session_state.filter_mode = "all"
 
-        # обработка кнопки
-        #if show_all:
-        #    st.session_state.filter_mode = "all"
-
         # если введён преподаватель → переключаем режим
         #if selected_supervisor.strip():
         #    st.session_state.filter_mode = "supervisor"
