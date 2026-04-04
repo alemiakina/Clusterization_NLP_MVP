@@ -46,24 +46,20 @@ model = load_model()
 def truncate(text, max_words=50):
     return " ".join(str(text).split()[:max_words])
 
+import re
+
+def clean_text(text):
+    text = str(text)
+    text = re.sub(r'\s+', ' ', text)  # схлопываем пробелы
+    text = text.strip()
+    return text
 
 def get_embeddings(df, mode="Только темы", alpha=0.8):
-    titles = df['thesis_topic'].fillna("").tolist()
-    descs = df['description_thesis'].fillna("").apply(truncate).tolist()
-
-    title_emb = model.encode(titles)
-    desc_emb = model.encode(descs)
-
+    titles = df['thesis_topic'].fillna("").apply(clean_text).tolist()
+    embeddings = model.encode(titles)
     from sklearn.preprocessing import normalize
+    X = normalize(embeddings)
 
-    if mode == "Только темы":
-        X = title_emb
-    elif mode == "Только описания":
-        X = desc_emb
-    else:
-        X = alpha * title_emb + (1 - alpha) * desc_emb
-
-    X = normalize(X)
     return X
 
 
