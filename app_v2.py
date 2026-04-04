@@ -23,6 +23,15 @@ from rapidfuzz import fuzz
 # -----------------------
 st.title("Кластеризация ВКР")
 
+st.markdown("""
+<style>
+[data-testid="stDataFrame"] td {
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 #uploaded_file = st.file_uploader("Загрузи Excel", type=["xlsx"])
 df = pd.read_excel("df_excel_clean.xlsx")
 #mode = st.selectbox(
@@ -434,7 +443,11 @@ if df is not None and not df.empty:
             st.warning("Недостаточно кластеров для метрики")
 
         # --- ТАБЛИЦА ---
-        st.dataframe(df_display[["thesis_topic", "cluster", "supervisor_code"]])
+        st.data_editor(
+            df_display[["thesis_topic", "cluster", "supervisor_code"]],
+            use_container_width=True,
+            disabled=True
+        )
 
         # --- СКАЧИВАНИЕ ---
         #st.download_button(
