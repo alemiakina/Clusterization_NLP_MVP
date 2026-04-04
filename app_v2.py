@@ -445,7 +445,8 @@ if df is not None and not df.empty:
         st.data_editor(
             df_display[["thesis_topic", "cluster", "supervisor_code"]],
             use_container_width=True,
-            disabled=True
+            disabled=True,
+            row_height=80 
         )
 
         # --- СКАЧИВАНИЕ ---
