@@ -454,7 +454,7 @@ if df is not None and not df.empty:
                 ),
                 "cluster": st.column_config.NumberColumn(
                     "Кластер",
-                    width=70 
+                    width=50 
                 ),
                 "supervisor_code": st.column_config.TextColumn(
                     "Препод",
