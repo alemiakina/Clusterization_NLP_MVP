@@ -227,8 +227,9 @@ def generate_cluster_label_ruT5(keywords, generator):
 
     result = generator(
         prompt,
-        max_new_tokens=20,
-        do_sample=False
+        max_new_tokens=10,
+        do_sample=False,
+        repetition_penalty=2.0
     )
 
     text = result[0]["generated_text"].strip()
