@@ -221,7 +221,7 @@ def get_top_words_per_cluster(df, labels, text_col='thesis_topic', top_n=5):
 
 def generate_cluster_label_ruT5(keywords, generator):
     prompt = (
-        "Сформулируй короткое название темы (2-4 слова) по ключевым словам: "
+        "суммаризация: "
         + ", ".join(keywords)
     )
 
