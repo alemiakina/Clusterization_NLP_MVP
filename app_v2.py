@@ -15,6 +15,9 @@ from scipy.spatial import ConvexHull
 from sklearn.metrics.pairwise import cosine_similarity
 from rapidfuzz import fuzz
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+from transformers import pipeline
+
 
 # -----------------------
 # UI
@@ -30,7 +33,7 @@ mode = "Только темы"
 
 alpha = 0.8
 # -----------------------
-# Модель
+# Модели
 # -----------------------
 @st.cache_resource
 def load_model():
@@ -38,10 +41,41 @@ def load_model():
 
 model = load_model()
 
+@st.cache_resource
+def load_ruT5():
+    return pipeline(
+        "text2text-generation",
+        model="cointegrated/rut5-small",
+        tokenizer="cointegrated/rut5-small",
+        max_length=32
+    )
 
 # -----------------------
 # Функции
 # -----------------------
+RUSSIAN_STOPWORDS = [
+    # --- стандартные ---
+    "и","в","на","с","по","для","как","из","к","это","при","от","до","над","под",
+    "без","о","об","у","же","ли","бы","то","не","да","или","а","но","за","со",
+
+    # --- базовый научный мусор ---
+    "исследование","анализ","разработка","метод","методы","система","системы",
+    "подход","основы","аспекты","оценка","оценки","обоснование","изучение",
+
+    # --- часто встречается в твоих темах ---
+    "основе","примере","процессе","использование","использования",
+    "применение","применения","области","условиях","современных",
+
+    # --- мусор из формулировок ---
+    "различных","различные",
+    "предложений",
+    "рекомендаций",
+
+    # --- мусорные сущности ---
+    "ооо","г","года"
+]
+
+
 def truncate(text, max_words=50):
     return " ".join(str(text).split()[:max_words])
 
@@ -156,6 +190,70 @@ def cluster_data(X):
     )
     return clusterer.fit_predict(X)
 
+def get_top_words_per_cluster(df, labels, text_col='thesis_topic', top_n=5):
+    df = df.copy()
+    df['cluster'] = labels
+
+    cluster_keywords = {}
+
+    for cluster in sorted(df['cluster'].unique()):
+        if cluster == -1:
+            continue
+
+        texts = df[df['cluster'] == cluster][text_col].dropna().tolist()
+
+        if len(texts) < 3:
+            continue
+
+        vectorizer = TfidfVectorizer(
+            max_features=1000,
+            stop_words=RUSSIAN_STOPWORDS
+        )
+
+        X = vectorizer.fit_transform(texts)
+
+        scores = np.asarray(X.mean(axis=0)).flatten()
+        words = np.array(vectorizer.get_feature_names_out())
+
+        top_words = words[np.argsort(scores)[::-1][:top_n]]
+
+        cluster_keywords[cluster] = list(top_words)
+
+    return cluster_keywords
+
+def generate_cluster_label_ruT5(keywords, generator):
+    prompt = (
+        "Сформулируй короткое название темы (2-4 слова) по ключевым словам: "
+        + ", ".join(keywords)
+    )
+
+    result = generator(
+        prompt,
+        max_new_tokens=20,
+        do_sample=False
+    )
+
+    text = result[0]["generated_text"].strip()
+
+    # fallback если вдруг фигня
+    if len(text) < 3:
+        return " ".join(keywords[:3])
+
+    return text
+
+@st.cache_data
+def generate_all_cluster_names(df, labels):
+    generator = load_ruT5()
+
+    cluster_keywords = get_top_words_per_cluster(df, labels)
+
+    cluster_names = {}
+
+    for cluster, words in cluster_keywords.items():
+        cluster_names[cluster] = generate_cluster_label_ruT5(words, generator)
+
+    return cluster_names
+
 
 def fuzzy_similarity(a, b):
     return max(
@@ -240,11 +338,15 @@ if df is not None and not df.empty:
         with st.spinner("Кластеризация..."):
             labels = cluster_data(X_2d)
 
+        with st.spinner("Генерируем названия кластеров..."):
+            cluster_names = generate_all_cluster_names(df, labels)
+
         # СОХРАНЯЕМ
         st.session_state.X_2d = X_2d
         st.session_state.labels = labels
         st.session_state.clustered_df = df.copy()
         st.session_state.clustered_df["cluster"] = labels
+        st.session_state.cluster_names = cluster_names
 
     # -----------------------
     # ✅ ОТОБРАЖЕНИЕ (БЕЗ ПЕРЕСЧЁТА)
@@ -392,7 +494,12 @@ if df is not None and not df.empty:
                     size=9,
                     line=dict(width=0.5, color='black')
                 ),
-                name=f"Кластер {cluster}",
+                cluster_label = st.session_state.get("cluster_names", {}).get(
+                    cluster,
+                    f"Кластер {cluster}"
+                )
+
+                name=cluster_label,
 
                 # добавляем group
                 legendgroup=f"cluster_{cluster}",
