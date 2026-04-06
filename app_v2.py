@@ -455,7 +455,7 @@ if df is not None and not df.empty:
                     width=50 
                 ),
                 "supervisor_code": st.column_config.TextColumn(
-                    "Препод",
+                    "Преподаватель",
                     width=80
                 )
             }
